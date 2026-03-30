@@ -1,15 +1,18 @@
-\"\"\"Simple model implementation for testing.\"\"\" 
- 
-class SimpleModel: 
-    \"\"\"A placeholder model that always returns a response.\"\"\" 
-    def __init__(self): 
-        \"\"\"Initialize the model.\"\"\" 
-        pass 
- 
-    def predict(self, text): 
-        \"\"\"Predict based on input text.\"\"\" 
-        return { 
-            "result": "processed", 
-            "confidence": 0.95, 
-            "input_length": len(text) 
-        } 
+"""Model interface for AI feature."""
+
+from .feature import AIFeature
+
+# Global feature instance
+_feature = None
+
+def get_feature():
+    """Get or create the AI feature instance."""
+    global _feature
+    if _feature is None:
+        _feature = AIFeature()
+    return _feature
+
+def predict(text):
+    """Predict sentiment for input text."""
+    feature = get_feature()
+    return feature.analyze_sentiment(text)
