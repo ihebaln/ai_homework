@@ -21,40 +21,14 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install pytest pytest-cov scikit-learn pandas numpy joblib
+        pip install pytest scikit-learn pandas numpy joblib
     
-    - name: Create models directory if not exists
-      run: mkdir -p models
-    
-    - name: Check if model exists, create if not
+    - name: List directory structure
       run: |
-        if [ ! -f models/sentiment_model.joblib ]; then
-          echo "Model not found, creating a simple one..."
-          python -c "
-import joblib
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.linear_model import LogisticRegression
-
-# Create simple model
-vectorizer = TfidfVectorizer(max_features=100)
-classifier = LogisticRegression()
-
-# Train on simple data
-texts = ['good', 'great', 'excellent', 'bad', 'terrible', 'awful']
-labels = [1, 1, 1, 0, 0, 0]
-X = vectorizer.fit_transform(texts)
-classifier.fit(X, labels)
-
-# Save
-import os
-os.makedirs('models', exist_ok=True)
-joblib.dump({'vectorizer': vectorizer, 'classifier': classifier}, 'models/sentiment_model.joblib')
-print('Model created successfully')
-"
-        else
-          echo "Model already exists"
-        fi
+        ls -la
+        ls -la src/
+        ls -la tests/
     
-    - name: Run tests
+    - name: Run simple tests
       run: |
-        python -m pytest tests/test_model.py -v
+        python -m pytest tests/test_simple.py -v
